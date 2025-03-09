@@ -133,24 +133,21 @@ KERNEL_FQ void m88888_mxx (KERN_ATTR_BASIC ())
     w[12] = w3[0];
     w[13] = w3[1];
 
-    u64x num = 14695981039346656037UL;
+    // Initialize FNV-1a 32-bit hash value with the offset basis
+    u32x num = 0x811c9dc5;  // FNV-1a 32-bit offset basis
 
     u8x *p = (u8x *)(w);
 
-    for (u32 i = 0; i < pw_len; i++)
-    {
-      num ^= (p[i]);
-#ifdef OPT1
-      num += (num << 1) + (num << 4) + (num << 5) + (num << 7) + (num << 8) + (num << 40);
-#else
-      num *= 1099511628211;
-#endif
+    for (u32 i = 0; i < pw_len; i++) {
+        num ^= (p[i]);  // XOR the byte with the current hash value
+        num *= 0x01000193;  // Multiply by FNV prime
     }
 
-    const u32 r0 = l32_from_64_S (num);
-    const u32 r1 = h32_from_64_S (num);
-    const u32 r2 = 0;
-    const u32 r3 = 0;
+    // Final result
+    const u32 r0 = num;  // Store the final 32-bit hash value
+    const u32 r1 = 0;    // Not used in this case, set to 0
+    const u32 r2 = 0;    // Not used, set to 0
+    const u32 r3 = 0;    // Not used, set to 0
 
     COMPARE_M_SCALAR_2 (r0, r1, r2, r3);
   }
@@ -266,45 +263,4 @@ KERNEL_FQ void m88888_sxx (KERN_ATTR_BASIC ())
     w2[1] = wordl2[1] | wordr2[1];
     w2[2] = wordl2[2] | wordr2[2];
     w2[3] = wordl2[3] | wordr2[3];
-    w3[0] = wordl3[0] | wordr3[0];
-    w3[1] = wordl3[1] | wordr3[1];
-
-    u32x w[14] = { 0 };
-
-    w[ 0] = w0[0];
-    w[ 1] = w0[1];
-    w[ 2] = w0[2];
-    w[ 3] = w0[3];
-    w[ 4] = w1[0];
-    w[ 5] = w1[1];
-    w[ 6] = w1[2];
-    w[ 7] = w1[3];
-    w[ 8] = w2[0];
-    w[ 9] = w2[1];
-    w[10] = w2[2];
-    w[11] = w2[3];
-    w[12] = w3[0];
-    w[13] = w3[1];
-
-    u64x num = 14695981039346656037UL;
-
-    u8x *p = (u8x *)(w);
-
-    for (u32 i = 0; i < pw_len; i++)
-    {
-      num ^= (p[i]);
-#ifdef OPT1
-      num += (num << 1) + (num << 4) + (num << 5) + (num << 7) + (num << 8) + (num << 40);
-#else
-      num *= 1099511628211;
-#endif
-    }
-
-    const u32 r0 = l32_from_64_S (num);
-    const u32 r1 = h32_from_64_S (num);
-    const u32 r2 = 0;
-    const u32 r3 = 0;
-
-    COMPARE_S_SCALAR_2 (r0, r1, r2, r3);
-  }
-}
+   

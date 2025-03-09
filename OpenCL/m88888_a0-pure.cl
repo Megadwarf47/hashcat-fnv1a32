@@ -43,22 +43,21 @@ KERNEL_FQ void m88888_mxx (KERN_ATTR_RULES ())
 
     tmp.pw_len = apply_rules (rules_buf[il_pos].cmds, tmp.i, tmp.pw_len);
 
-    u64 num = 14695981039346656037UL;
+    // Initialize FNV-1 32-bit hash value with the offset basis
+    u32 num = 2166136261UL;  // FNV-1 32-bit offset basis
 
     u8 *p = (u8 *)tmp.i;
 
+    // Iterate over the password bytes
     for (u32 i = 0; i < tmp.pw_len; i++)
     {
-      num ^= (p[i]);
-#ifdef OPT1
-      num += (num << 1) + (num << 4) + (num << 5) + (num << 7) + (num << 8) + (num << 40);
-#else
-      num *= 1099511628211;
-#endif
+      num ^= (p[i]);  // XOR the byte with the current hash value
+      num *= 16777619UL;  // Multiply by the FNV prime
     }
 
-    const u32 r0 = l32_from_64_S (num);
-    const u32 r1 = h32_from_64_S (num);
+    // Since FNV-1 is 32-bit, use the hash value directly for comparison
+    const u32 r0 = num;
+    const u32 r1 = 0;
     const u32 r2 = 0;
     const u32 r3 = 0;
 
@@ -104,22 +103,21 @@ KERNEL_FQ void m88888_sxx (KERN_ATTR_RULES ())
 
     tmp.pw_len = apply_rules (rules_buf[il_pos].cmds, tmp.i, tmp.pw_len);
 
-    u64 num = 14695981039346656037UL;
+    // Initialize FNV-1 32-bit hash value with the offset basis
+    u32 num = 2166136261UL;  // FNV-1 32-bit offset basis
 
     u8 *p = (u8 *)tmp.i;
 
+    // Iterate over the password bytes
     for (u32 i = 0; i < tmp.pw_len; i++)
     {
-      num ^= (p[i]);
-#ifdef OPT1
-      num += (num << 1) + (num << 4) + (num << 5) + (num << 7) + (num << 8) + (num << 40);
-#else
-      num *= 1099511628211;
-#endif
+      num ^= (p[i]);  // XOR the byte with the current hash value
+      num *= 16777619UL;  // Multiply by the FNV prime
     }
 
-    const u32 r0 = l32_from_64_S (num);
-    const u32 r1 = h32_from_64_S (num);
+    // Since FNV-1 is 32-bit, use the hash value directly for comparison
+    const u32 r0 = num;
+    const u32 r1 = 0;
     const u32 r2 = 0;
     const u32 r3 = 0;
 
