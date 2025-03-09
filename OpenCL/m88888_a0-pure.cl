@@ -1,22 +1,3 @@
-/**
- * Author......: See docs/credits.txt
- * License.....: MIT
- */
-
-//#define NEW_SIMD_CODE
-
-#define OPT1
-
-#ifdef KERNEL_STATIC
-#include "inc_vendor.h"
-#include "inc_types.h"
-#include "inc_platform.cl"
-#include "inc_common.cl"
-#include "inc_rp.h"
-#include "inc_rp.cl"
-#include "inc_scalar.cl"
-#endif
-
 KERNEL_FQ void m88888_mxx (KERN_ATTR_RULES ())
 {
   /**
@@ -43,21 +24,18 @@ KERNEL_FQ void m88888_mxx (KERN_ATTR_RULES ())
 
     tmp.pw_len = apply_rules (rules_buf[il_pos].cmds, tmp.i, tmp.pw_len);
 
-    // Initialize FNV-1 32-bit hash value with the offset basis
-    u32 num = 2166136261UL;  // FNV-1 32-bit offset basis
+    u32 num = 2166136261UL;  // 32-bit FNV-1a initial value
 
     u8 *p = (u8 *)tmp.i;
 
-    // Iterate over the password bytes
     for (u32 i = 0; i < tmp.pw_len; i++)
     {
-      num ^= (p[i]);  // XOR the byte with the current hash value
-      num *= 16777619UL;  // Multiply by the FNV prime
+      num ^= (p[i]);           // XOR the current byte
+      num *= 16777619;         // Multiply by the 32-bit FNV-1a prime
     }
 
-    // Since FNV-1 is 32-bit, use the hash value directly for comparison
-    const u32 r0 = num;
-    const u32 r1 = 0;
+    const u32 r0 = num;  // Directly use the 32-bit result
+    const u32 r1 = 0;    // No second part for 32-bit hash
     const u32 r2 = 0;
     const u32 r3 = 0;
 
@@ -103,21 +81,18 @@ KERNEL_FQ void m88888_sxx (KERN_ATTR_RULES ())
 
     tmp.pw_len = apply_rules (rules_buf[il_pos].cmds, tmp.i, tmp.pw_len);
 
-    // Initialize FNV-1 32-bit hash value with the offset basis
-    u32 num = 2166136261UL;  // FNV-1 32-bit offset basis
+    u32 num = 2166136261UL;  // 32-bit FNV-1a initial value
 
     u8 *p = (u8 *)tmp.i;
 
-    // Iterate over the password bytes
     for (u32 i = 0; i < tmp.pw_len; i++)
     {
-      num ^= (p[i]);  // XOR the byte with the current hash value
-      num *= 16777619UL;  // Multiply by the FNV prime
+      num ^= (p[i]);           // XOR the current byte
+      num *= 16777619;         // Multiply by the 32-bit FNV-1a prime
     }
 
-    // Since FNV-1 is 32-bit, use the hash value directly for comparison
-    const u32 r0 = num;
-    const u32 r1 = 0;
+    const u32 r0 = num;  // Directly use the 32-bit result
+    const u32 r1 = 0;    // No second part for 32-bit hash
     const u32 r2 = 0;
     const u32 r3 = 0;
 
